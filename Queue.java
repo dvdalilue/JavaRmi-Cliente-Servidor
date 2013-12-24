@@ -1,14 +1,31 @@
-/*
- *Implementation of Queue.
+/**
+ * @author      David Lilue <dvdalilue@gmail.com>
+ * @version     1.0          
+ * @since       2013-12-23
  */
 public class Queue<E> {
     
+    /**
+     * Apuntador al principio de la cola
+     */
     public Box<E> ini_queue; //First Element
+    /**
+     * Apuntador al final de la cola
+     */
     public Box<E> end_queue; //Last Element
+    /**
+     * Contador de los elementos
+     */    
     private int counter;      //Counter of elements
 
-    /*
-     *Constructor
+    /**
+     * Constructor de la clase Queue.
+     * <p>
+     * Crea una estructura con tres elementos, una cabeza, 
+     * con el principio, el final y un contador de los elementos 
+     * de la cola. Inicializa los dos apuntadores en null 
+     * y el contador en 0.
+     * <p>
      */
     public Queue() {
         this.ini_queue = null; //Initialize on null
@@ -16,9 +33,18 @@ public class Queue<E> {
         this.counter = 0; //is empty
     }
 
-    /*
-     *Add an element to the queue of type "E"
-     */    
+    /**
+     * Agrega un elemento al final.
+     * <p>
+     * Toma el elemento nuevo, crea una caja para guardarlo,
+     * si la cola esta vacia, el apuntador del principio y 
+     * final apuntaran a el. En caso contrario el final de la
+     * cola apuntara al nuevo elemento al igual que el final 
+     * de la cola. En cualquier caso el contador aumenta en 1.
+     * <p>
+     *
+     * @param  elem elemento que sera agregado
+     */
     public void add_end(E elem) {
 	Box<E> aux = new Box<E>(elem);
         if (this.counter == 0) { // Case of empty queue
@@ -29,8 +55,18 @@ public class Queue<E> {
 	this.counter += 1; //Always counter raise by 1
     }
 
-    /*
-     *Add an element at the beginnig, like stack
+    /**
+     * Agrega un elemento al principio(pila).
+     * <p>
+     * Toma el elemento nuevo, crea una caja para guardarlo,
+     * donde guarda al elemento y apunta al principio de la cola.
+     * Si la cola(pila) esta vacia, el apuntador del principio y 
+     * final apuntaran a el. En caso contrario el principio de la
+     * cola(pila) apuntara al nuevo elemento de la cola. 
+     * En cualquier caso el contador aumenta en 1.
+     * <p>
+     *
+     * @param  elem elemento que sera agregado
      */
     public void add_ini(E elem) {
         Box<E> aux = new Box<E>(elem, this.ini_queue);
@@ -42,8 +78,15 @@ public class Queue<E> {
 	this.counter += 1; //Always counter raise by 1
     }
 
-    /*
-     *Take the first element on the queue
+    /**
+     * Retorna el primer elemento de la cola.
+     * <p>
+     * Si la cola esta vacia retorna null. Sino obtiene el valor
+     * del primer elemento de la cola. Adelanta el apuntador del
+     * principio al su siguiente. Por ultimo reduce el contador por 1.
+     * <p>
+     *
+     * @return retorna el primer elemento si existe, sino null
      */
     public E first() {
 	if (this.counter > 0) {
@@ -55,8 +98,14 @@ public class Queue<E> {
 	return null;
     }
 
-    /*
-     *Verify if the queue is empty
+    /**
+     * Verifica si la cola esta vacia.
+     * <p>
+     * Verifica si el contador es equivalente a 0, para decir
+     * si esta vacia. Sino retorna false.
+     * <p>
+     *
+     * @return true si hay algun elemento, sino false
      */
     public boolean is_empty() {
 	if (this.counter == 0) {
@@ -65,8 +114,12 @@ public class Queue<E> {
 	return false;
     }
 
-    /*Geter of a private attribute*/
-    public int get_counter() {
+    /**
+     * Obtiene el numero de elementos.
+     *
+     * @return numero de elementos en la cola
+     */
+    public int get_count() {
         return this.counter;
     }
 }
