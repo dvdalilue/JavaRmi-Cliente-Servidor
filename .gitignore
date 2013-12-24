@@ -1,0 +1,20 @@
+#class files
+*.class
+
+# trash files
+*.*~
+*.swp
+.directory
+*.txt
+
+#input & output files
+*.in
+*.out
+
+#compress files
+*.zip
+*.tar
+*.gz
+*.rar
+*.7z
+*.gz2
