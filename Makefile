@@ -3,16 +3,16 @@ JAVAC = javac
 RMIC = rmic
 
 # Sources
-SERVER = RmiServerImpl.java
-CLIENT = RmiClient.java
+SERVER = s_rmifs.java
+CLIENT = c_rmifs.java
 
-all: RmiServer RmiClient
+all: s_rmifs c_rmifs
 	$(RMIC) RmiServerImpl
 
-RmiServer: $(SERVER)
+s_rmifs: $(SERVER)
 	$(JAVAC) $<
 
-RmiClient: $(CLIENT)
+c_rmifs: $(CLIENT)
 	$(JAVAC) $<
 
 clean:
