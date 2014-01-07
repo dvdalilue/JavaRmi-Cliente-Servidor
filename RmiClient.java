@@ -1,9 +1,5 @@
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.DirectoryStream;
-import java.nio.file.FileSystems;
-import java.nio.file.DirectoryIteratorException;
-import java.io.IOException;
+import java.io.File;
+import java.util.*;
 /**
  * @author      David Lilue <dvdalilue@gmail.com>
  * @version     1.0          
@@ -11,8 +7,8 @@ import java.io.IOException;
  */
 public class RmiClient { 
 
-    public DirectoryStream<Path> stream;
-    private final Path dir;
+    private File local;
+    private Collection<File> stream;
     /**
      * <p>
      * Se crea una estructura con un path unico y un
@@ -20,31 +16,63 @@ public class RmiClient {
      * <p>
      */
     public RmiClient() {
-        this.dir = FileSystems.getDefault().getPath("./");
-        this.stream = null;
+        this.local = new File(".");
+        this.stream = new ArrayList<File>();
     }
     /**
      * Crea un DirectoryStream del path actual de la aplicacion.
      *
      */
-    public void directory_stream() {
-        try {
-            this.stream = Files.newDirectoryStream(this.dir);
-        } catch (IOException | DirectoryIteratorException e) {
-            System.err.println(e);
-        }
+    public void scan_directory() {
+        this.stream = new ArrayList<File>();
+        addTree(this.local, this.stream);
     }
     /**
      * Crea un DirectoryStream a partir del path pasado como
      * parametro.
      *
-     * @param dir path en el cual se desea el directory stream
+     * @param path en el cual se desea el directory stream
      */
-    public void directory_stream(Path dir) {
-        try {
-            this.stream = Files.newDirectoryStream(dir);
-        } catch (IOException | DirectoryIteratorException e) {
-            System.err.println(e);
+    public void scan_this_directory(String path) {
+        this.stream = new ArrayList<File>();
+        addTree(new File(path), this.stream);
+    }
+    /**
+     * Imprime los archivos en el directorio
+     *
+     */
+    public void to_s() {
+        for (File aux : this.stream) {
+            System.out.println(" " + aux.getPath());            
         }
+    }
+    /**
+     * Recorre el directorio recursivamente
+     *
+     * @param file estructura del archivo donde se desea buscar
+     * @param all arreglo de los archivos en el direcctorio
+     */
+    public static void addTree(File file, Collection<File> all) {
+        File[] children = file.listFiles();
+        if (children != null) {
+            for (File child : children) {
+                all.add(child);
+                addTree(child, all);
+            }
+        }
+    }
+    /**
+     * Muestra las opciones de comandos
+     *
+     */
+    public static void info() {
+        System.out.println("\n***Comandos disponibles:\n\n" +
+                           "rls - muestra la lista de archivos disponibles en servidor centralizado.\n" +
+                           "lls - muestra la lista de archivos disponibles localmente (en el cliente).\n" +
+                           "sub <archivo> - sube un archivo al servidor remoto (Ej: sub clase.pdf).\n" +
+                           "baj <archivo> - baja un archivo desde el servidor remoto (Ej: baj ejemplo.c).\n" +
+                           "bor <archivo> - borra el archivo en el servidor remoto.\n" +
+                           "info - muestra la lista de comandos.\n" +
+                           "sal - termina la ejecución del programa cliente.\n");
     }
 }
