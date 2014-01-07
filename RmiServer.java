@@ -16,4 +16,21 @@ public interface RmiServer extends Remote {
      * @return sting del mensaje
      */
     public String getMessage() throws RemoteException;
+    /**
+     * Devuelve un string donde esta la informacion de los 
+     * archivos en el directorio actual
+     *
+     * @return el string de los archivos
+     */
+    public String directory() throws RemoteException;
+    /**
+     * Elimina un archivo or directorio.
+     * <p>
+     * Toma el nombre del archivo o directorio del parametro
+     * lo elimina.
+     * <p>
+     * @param name nombre del archivo o directorio a borrar.
+     * @return string de true si lo logro, de lo contrario de false
+     */
+    public String del(String name) throws RemoteException;
 }
