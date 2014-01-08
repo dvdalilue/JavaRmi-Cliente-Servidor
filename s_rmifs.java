@@ -1,6 +1,6 @@
 import java.rmi.RemoteException;
+import java.rmi.registry.*;
 import java.rmi.Naming;
-import java.rmi.registry.*; 
 import java.io.*;
 /**
  * @author      David Lilue <dvdalilue@gmail.com>
@@ -19,8 +19,6 @@ public class s_rmifs {
      */
     public static void main(String args[]) throws Exception {
         try {
-            RmiAuthen aut = (RmiAuthen)Naming.lookup("rmi://localhost:1100/RmiAuthentication");
-            System.out.println(aut.getMessage());
             System.out.println("RMI server started");
  
             try { //special exception handler for registry creation
@@ -32,7 +30,7 @@ public class s_rmifs {
             }
  
             //Instantiate RmiServer
-            RmiServerImpl obj = new RmiServerImpl();
+            RmiServerImpl obj = new RmiServerImpl("localhost");
  
             // Bind this object instance to the name "RmiServer"
             Naming.rebind("rmi://localhost:1099/RmiService", obj);
@@ -51,6 +49,8 @@ public class s_rmifs {
                     cmd = br.readLine();
                     if (cmd.equals("sal")) {
                         System.exit(0);
+                    } else if (cmd.equals("log")) {
+                        obj.log();
                     }
                 } catch (IOException ioe) {
                     System.out.println("IO error trying to read your name!");
