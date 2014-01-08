@@ -1,6 +1,6 @@
 /**
  * @author      David Lilue <dvdalilue@gmail.com>
- * @version     1.0          
+ * @version     1.1       
  * @since       2013-12-23
  */
 public class Box<E> {
@@ -10,6 +10,10 @@ public class Box<E> {
      */
     private E value;
     /**
+     * Valor del segundo contenido de la caja 
+     */
+    private E value2;
+    /**
      * Apuntador al elemento siguiente de la cola
      */
     public Box<E> next;
@@ -17,42 +21,62 @@ public class Box<E> {
     /**
      * Constructor de la clase Box, vacia.
      * <p>
-     * Crea una estructura con dos elementos, el valor(contenido)
-     * y un apuntador a una elemento del mismo tipo. Inicializa 
-     * los dos en null.
+     * Crea una caja con tres elementos, el valor, el segundo
+     * valor y un apuntador a una elemento del mismo tipo. 
+     * Inicializa los tres en null.
      * <p>
      */
     public Box() {// Empty constructor
 	this.value = null;
+        this.value2 = null;
 	this.next = null;
     }
     /**
      * Constructor de la clase Box, solo con el elemento.
      * <p>
-     * Crea una estructura con dos elementos, el valor(contenido)
-     * y un apuntador a una elemento del mismo tipo. Inicializa 
-     * el valor con el elemento y next con null.
+     * Crea una caja con tres elementos, el valor, el segundo
+     * valor y un apuntador a una elemento del mismo tipo. 
+     * Inicializa el valor con el elemento, el otro valor y next con null.
      * <p>
      *
      * @param  e elemento con que se creara la caja
      */
     public Box(E e) { //Constructor with element
 	this.value = e;
+        this.value2 = null;
+	this.next = null;
+    }
+    /**
+     * Constructor de la clase Box, solo con el elemento.
+     * <p>
+     * Crea una caja con tres elementos, el valor, el segundo
+     * valor y un apuntador a una elemento del mismo tipo. Inicializa 
+     * el valor con el elemento, el otro valor con el segundo elemento
+     * y next con null.
+     * <p>
+     *
+     * @param  e elemento con que se creara la caja
+     */
+    public Box(E e, E e2) { //Constructor with element
+	this.value = e;
+        this.value2 = e2;
 	this.next = null;
     }
     /**
      * Constructor de la clase Box completa.
      * <p>
-     * Crea una estructura con dos elementos, el valor(contenido)
-     * y un apuntador a una elemento del mismo tipo. Inicializa 
-     * el valor con el elemento y next con la otra caja.
+     * Crea una caja con tres elementos, el valor, el segundo
+     * valor y un apuntador a una elemento del mismo tipo. Inicializa 
+     * el valor con el elemento, el otro valor con el segundo elemento
+     * y next con la otra caja.
      * <p>
      *
      * @param  e elemento con que se creara la caja
      * @param  next elemento que sera apuntado por esta caja
      */
-    public Box(E e, Box<E> next) {
+    public Box(E e, E e2, Box<E> next) {
         this.value = e;
+        this.value2 = e2;
 	this.next = next;
     }
     
@@ -67,7 +91,7 @@ public class Box<E> {
      * @return true si los valores son iguales, sino false
      */
     public boolean equals(Box<E> obj) { //Depends of type E
-	return (this.value == obj.get_value()); // Can Change!!
+	return (this.value == obj.get_value() && this.value2 == obj.get_value_to()); // Can Change!!
     }
 
     /**
@@ -77,5 +101,14 @@ public class Box<E> {
      */
     public E get_value() {
 	return this.value;
+    }
+
+    /**
+     * Obtiene el valor de la caja.
+     *
+     * @return valor contenido en la caja
+     */
+    public E get_value_to() {
+	return this.value2;
     }
 }

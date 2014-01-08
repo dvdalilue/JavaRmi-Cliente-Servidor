@@ -45,8 +45,8 @@ public class Queue<E> {
      *
      * @param  elem elemento que sera agregado
      */
-    public void add_end(E elem) {
-	Box<E> aux = new Box<E>(elem);
+    public void add_end(E elem, E elem2) {
+	Box<E> aux = new Box<E>(elem, elem2);
         if (this.counter == 0) { // Case of empty queue
             this.end_queue = this.ini_queue = aux;
         } else { // Else case 
@@ -68,8 +68,8 @@ public class Queue<E> {
      *
      * @param  elem elemento que sera agregado
      */
-    public void add_ini(E elem) {
-        Box<E> aux = new Box<E>(elem, this.ini_queue);
+    public void add_ini(E elem, E elem2) {
+        Box<E> aux = new Box<E>(elem, elem2, this.ini_queue);
         if (this.counter == 0) { // Case of empty queue
             this.end_queue = this.ini_queue = aux;
         } else { // Else case
@@ -121,5 +121,32 @@ public class Queue<E> {
      */
     public int get_count() {
         return this.counter;
+    }
+
+    /**
+     * Imprime en contenido de la cola.
+     *
+     */
+    public void to_s() {
+        Box<E> aux = this.ini_queue;
+        while (aux != null) {
+            System.out.println(aux.get_value() + " - " + aux.get_value_to());
+            aux = aux.next;
+        }
+    }
+
+    /**
+     * Imprime en contenido de la cola hasta un maximo.
+     *
+     * @param max numero maximo de elementos a imprimir
+     */
+    public void to_s(int max) {
+        Box<E> aux = this.ini_queue;
+        int i = 0;
+        while ((aux != null) && (i < max)) {
+            System.out.println(aux.get_value() + " - " + aux.get_value_to());
+            aux = aux.next;
+            i++;
+        }
     }
 }
