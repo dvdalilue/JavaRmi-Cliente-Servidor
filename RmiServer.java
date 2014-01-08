@@ -30,9 +30,9 @@ public interface RmiServer extends Remote {
      * lo elimina.
      * <p>
      * @param name nombre del archivo o directorio a borrar.
-     * @return string de true si lo logro, de lo contrario de false
+     * @return true si lo logro eliminar, de lo contrario de false
      */
-    public String del(String name) throws RemoteException;
+    public Boolean del(String name) throws RemoteException;
     /**     
      * Verifica si la combinacion de nombre y clave es parte de los usuarios.
      * <p>

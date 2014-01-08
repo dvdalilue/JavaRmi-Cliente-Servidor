@@ -30,10 +30,10 @@ public class c_rmifs {
             RmiServer obj = (RmiServer)Naming.lookup("rmi://localhost:1099/RmiService"); 
             //RmiServer obj = (RmiServer)Naming.lookup("rmi://serena.ldc.usb.ve:1099/RmiService");
             
-            // if (!(obj.authentic(name+":"+key))) {
-            //     System.out.println("***Usuario o clave invalido!!!");
-            //     System.exit(0);
-            // }
+            if (!(obj.authentic(name+":"+key))) {
+                System.out.println("***Usuario o clave invalido!!!");
+                System.exit(0);
+            }
             RmiClient cli = new RmiClient();
             while (true) {
                 System.out.print("\u001B[37m["+name+"@"+"Cliente Rmi:~]$ \u001B[0m");
@@ -74,7 +74,11 @@ public class c_rmifs {
                         }
                         else if (atr[0].equals("bor")) {
                             try {
-                                System.out.println(atr[1]);
+                                if (obj.del(atr[1])) {
+                                    System.out.println("Se elimino el archivo");
+                                } else {
+                                    System.out.println("No se elimino el archivo");
+                                }
                             } catch (Exception e) {
                                 System.out.println("Falto identificar el archivo. Ej. bor test.txt");
                             }

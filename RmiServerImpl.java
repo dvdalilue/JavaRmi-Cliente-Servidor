@@ -69,9 +69,9 @@ public class RmiServerImpl
      * @param name nombre del archivo o directorio a borrar.
      * @return string de true si lo logro, de lo contrario de false
      */
-    public String del(String name) {
+    public Boolean del(String name) {
         File aux = new File(name);
-        return Boolean.toString(aux.delete());
+        return aux.delete();
     }
     /**     
      * Verifica si la combinacion de nombre y clave es parte de los usuarios.
