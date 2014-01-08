@@ -16,4 +16,17 @@ public interface RmiAuthen extends Remote {
      * @return sting del mensaje
      */
     public String getMessage() throws RemoteException;
+    /**     
+     * Verifica si la combinacion de nombre y clave es parte de los usuarios.
+     * <p>
+     * La verficcacion se realiza gracias a un servidor de autenticacion
+     * done estan todos los usuarios con su clave. Que poseen permiso de entrar
+     * al servidor de archivos.
+     * <p>
+     * @param usr nombre del usuario a verificar.
+     * @param pass clave que supuestamente tiene asignado el usuario.
+     *
+     * @return retorna true si existe la combinacion, sino false
+     */
+    public Boolean authentic(String usr_pass) throws RemoteException;
 }
