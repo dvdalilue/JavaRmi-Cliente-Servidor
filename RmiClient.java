@@ -43,7 +43,11 @@ public class RmiClient {
      */
     public void to_s() {
         for (File aux : this.stream) {
-            System.out.println(" " + aux.getPath());            
+            if (aux.isDirectory()) {
+                System.out.println("\u001B[32m" + aux.getPath() + "\u001B[0m");
+            } else {
+                System.out.println(aux.getPath());
+            }           
         }
     }
     /**
@@ -57,7 +61,7 @@ public class RmiClient {
         if (children != null) {
             for (File child : children) {
                 all.add(child);
-                addTree(child, all);
+                //addTree(child, all);
             }
         }
     }
