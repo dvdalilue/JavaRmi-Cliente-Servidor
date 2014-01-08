@@ -28,7 +28,7 @@ public class a_rmifs {
         }
  
         //Instantiate RmiServer
-        RmiAuthenImpl obj = new RmiAuthenImpl();
+        RmiAuthenImpl obj = new RmiAuthenImpl("user");
  
         // Bind this object instance to the name "RmiServer"
         Naming.rebind("rmi://localhost:1100/RmiAuthentication", obj);
