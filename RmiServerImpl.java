@@ -1,7 +1,7 @@
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.io.File;
+import java.io.*;
 import java.lang.StringBuilder;
 /**
  * @author      David Lilue <dvdalilue@gmail.com>
@@ -72,6 +72,47 @@ public class RmiServerImpl
     public Boolean del(String name) {
         File aux = new File(name);
         return aux.delete();
+    }
+    /**
+     * Descarga un archivo o directorio.
+     * <p>
+     * Toma el nombre del archivo o directorio del parametro
+     * lo descarga.
+     * <p>
+     * @param name nombre del archivo o directorio a descargar.
+     * @return cadena de bytes con la informacion
+     */
+    public byte[] down(String name) {
+        try {
+            File file = new File(name);
+            byte buffer[] = new byte[(int)file.length()];
+            BufferedInputStream input = new BufferedInputStream(new FileInputStream(name));
+            input.read(buffer,0,buffer.length);
+            input.close();
+            return(buffer);
+        } catch(Exception e){
+            System.out.println("DownFile: "+e.getMessage());
+            e.printStackTrace();
+            return(null);
+        }
+    }
+    /**
+     * Sube un archivo o directorio.
+     * <p>
+     * Toma el nombre del archivo o directorio del parametro
+     * lo sube(crea localmente).
+     * <p>
+     * @param buffer arreglo de bytes con la informacion 
+     */
+    public void up(byte[] buffer, String name) {
+        try {
+            BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(name));
+            output.write(buffer,0,buffer.length);
+            output.flush();
+            output.close();
+        } catch (Exception e) {
+            System.out.println("Fallo al intentar crear un archivo: " + e);
+        }
     }
     /**     
      * Verifica si la combinacion de nombre y clave es parte de los usuarios.

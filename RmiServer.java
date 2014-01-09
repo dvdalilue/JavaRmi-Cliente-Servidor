@@ -24,6 +24,25 @@ public interface RmiServer extends Remote {
      */
     public String directory() throws RemoteException;
     /**
+     * Descarga un archivo or directorio.
+     * <p>
+     * Toma el nombre del archivo o directorio del parametro
+     * lo descarga.
+     * <p>
+     * @param name nombre del archivo o directorio a descargar.
+     * @return cadena de bytes con la informacion
+     */
+    public byte[] down(String name) throws RemoteException;
+    /**
+     * Sube un archivo o directorio.
+     * <p>
+     * Toma el nombre del archivo o directorio del parametro
+     * lo sube(crea localmente).
+     * <p>
+     * @param buffer arreglo de bytes con la informacion 
+     */
+    public void up(byte[] buffer, String name) throws RemoteException;
+    /**
      * Elimina un archivo or directorio.
      * <p>
      * Toma el nombre del archivo o directorio del parametro

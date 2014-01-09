@@ -1,4 +1,4 @@
-import java.io.File;
+import java.io.*;
 import java.util.*;
 /**
  * @author      David Lilue <dvdalilue@gmail.com>
@@ -36,6 +36,42 @@ public class RmiClient {
     public void scan_this_directory(String path) {
         this.stream = new ArrayList<File>();
         addTree(new File(path), this.stream);
+    }
+    /**
+     * Crea un archivo a partir de un buffer de bytes con la informacion.
+     *
+     * @param buffer arreglo de bytes con la informacion del archivo
+     */
+    public void create_file(byte[] buffer, String name) {
+        try {
+            BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(name));
+            output.write(buffer,0,buffer.length);
+            output.flush();
+            output.close();
+        } catch (Exception e) {
+            File aux = new File(name);
+            aux.delete();
+            System.err.println("El archivo no existe, por lo que no se puede bajar");
+        }
+    }
+    /**
+     * Obtiene el arreglo de bytes con la informacion del archivo
+     * especificado en el nombre.
+     *
+     * @param name nombre del archivo que se desea sacar el buffer
+     * @return arreglo de byte con la informacion del archivo
+     */
+    public byte[] get_byte_b(String name) {
+        try {
+            File file = new File(name);
+            byte buffer[] = new byte[(int)file.length()];
+            BufferedInputStream input = new BufferedInputStream(new FileInputStream(name));
+            input.read(buffer,0,buffer.length);
+            input.close();
+            return(buffer);
+        } catch(Exception e){
+            return(null);
+        }
     }
     /**
      * Imprime los archivos en el directorio

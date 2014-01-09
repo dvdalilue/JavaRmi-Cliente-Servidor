@@ -22,6 +22,7 @@ public class c_rmifs {
             //  open up standard input
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             String atr[], name, key, cmd = null;
+            byte[] buffer;
             System.out.print("Nombre: ");
             name = br.readLine();
             System.out.print("Clave: ");
@@ -60,14 +61,19 @@ public class c_rmifs {
                         }
                         else if (atr[0].equals("sub")) {
                             try {
-                                System.out.println(atr[1]);
+                                if ((buffer = cli.get_byte_b(atr[1])) != null) {
+                                    obj.up(buffer, atr[1]+"2");
+                                } else {
+                                    System.out.println("El archivo que desea subir no existe en su directorio local.");
+                                }
                             } catch (Exception e) {
                                 System.out.println("Falto identificar el archivo. Ej. sub test.txt");
                             }
                         }
                         else if (atr[0].equals("baj")) {
                             try {
-                                System.out.println(atr[1]);
+                                buffer = obj.down(atr[1]);
+                                cli.create_file(buffer,atr[1]);
                             } catch (Exception e) {
                                 System.out.println("Falto identificar el archivo. Ej. baj test.txt");
                             }
