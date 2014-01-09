@@ -147,7 +147,11 @@ public class RmiServerImpl
      */
     public Boolean authentic(String usr_pass) {
         try {
-            return this.aut.authentic(usr_pass);
+            if (!usr_pass.equals(":")) {
+                return this.aut.authentic(usr_pass);
+            } else {
+                return false;
+            } 
         } catch (Exception e) {
             System.out.println("ServerAuthen: " + e);
         }

@@ -26,7 +26,7 @@ public class c_rmifs {
             key = br.readLine();
 
             RmiServer obj = (RmiServer)Naming.lookup("rmi://localhost:1099/RmiService");
-            if (!(obj.authentic(name+":"+key)) && name!="") {
+            if (!(obj.authentic(name+":"+key))) {
                 System.out.println("***Usuario o clave invalido!!!");
                 System.exit(0);
             }

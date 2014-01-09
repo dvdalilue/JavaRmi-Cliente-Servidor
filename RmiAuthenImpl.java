@@ -1,6 +1,6 @@
-import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.lang.StringBuilder;
+import java.rmi.RemoteException;
+import java.util.*;
 import java.io.*;
 /**
  * @author      David Lilue <dvdalilue@gmail.com>
@@ -12,11 +12,9 @@ public class RmiAuthenImpl
     implements RmiAuthen {
 
     /**
-     *
-     * Archivo de los usuarios permitidos con su clave
-     * 
+     * Coleccion de comandos de los clientes.
      */
-    private String usr;
+    private Collection<String> permisos;
     private static final long serialVersionUID = 7526472295622776147L;
 
     /**
@@ -31,14 +29,13 @@ public class RmiAuthenImpl
      */
     public RmiAuthenImpl(String arch) throws RemoteException {
         super(0);
+        this.permisos = new ArrayList<String>();
         String aux = "";
-        StringBuilder temp = new StringBuilder("");
         try {
             BufferedReader in = new BufferedReader(new FileReader(new File(arch)));;
             while ((aux = in.readLine()) != null) {
-                temp.append(aux);
+                this.permisos.add(aux);
             }
-            this.usr = temp.toString();
         } catch (Exception e) {
             System.out.println("Problemas leyendo el archivo: " + e);
             System.exit(1);
@@ -58,7 +55,7 @@ public class RmiAuthenImpl
      * @return retorna true si existe la combinacion, sino false
      */
     public Boolean authentic(String usr_pass) {
-        if (this.usr.contains(usr_pass.subSequence(0,usr_pass.length()-1))) {
+        if (this.permisos.contains(usr_pass)) {
             return true;
         }
         return false;
