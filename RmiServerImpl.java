@@ -1,8 +1,8 @@
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.io.*;
 import java.lang.StringBuilder;
+import java.io.*;
 /**
  * @author      David Lilue <dvdalilue@gmail.com>
  * @version     1.1          
@@ -12,36 +12,46 @@ public class RmiServerImpl
     extends UnicastRemoteObject 
     implements RmiServer {
 
-    private RmiAuthen aut;
+    /**
+     * Cola de los comandos que han realizado los cliente
+     *
+     */
     private Queue<String> cmds;
+
+    /**
+     * Objeto que referencia a la implementacion del servidor
+     * de autenticacion.
+     *
+     */
+    private RmiAuthen aut;
+    private static final long serialVersionUID = 7526472295622776147L;
 
     /**
      * <p>
      * Contruye la clase a partir del constructor de la clase
-     * extendida UnicastRemoteObject
+     * extendida UnicastRemoteObject, ademas instancia una nueva cola
+     * y referencia al servidor de autenticacion.
      * <p>
+     *
+     * @param host DNS o IP donde esta servidor de autenticacion
+     * @param port puerto en el cual se encuentra el servicio requerido
+     *
      */
-    public RmiServerImpl(String host) throws RemoteException {
+    public RmiServerImpl(String host, int port) throws RemoteException {
         super(0);
         this.cmds = new Queue<String>();
         try {
-            this.aut = (RmiAuthen)Naming.lookup("rmi://" + host + ":1100/RmiAuthentication");
+            this.aut = (RmiAuthen)Naming.lookup("rmi://" + host + ":" + 
+                                                port + "/RmiAuthentication");
         } catch (Exception e) {
-            System.out.println("Error: " + e);
+            System.out.println("Constructor RmiServerImpl: " + e);
             System.exit(1);
         }
     }
-    /**
-     * Devuelve un mensaje.
-     *
-     * @return el string de un mensaje
-     */
-    public String getMessage() {
-        return "Hello!!";
-    }
+
     /**
      * Devuelve un string donde esta la informacion de los 
-     * archivos en el directorio actual
+     * archivos en el directorio actual del servidor.
      *
      * @return el string de los archivos
      */
@@ -52,16 +62,22 @@ public class RmiServerImpl
         if (children != null) {
             for (File child : children) {
                 if (child.isDirectory()) {
-                    aux.append("\u001B[32m" + child.getPath() + "\u001B[0m" + "\n");
+                    aux.append("\u001B[32m " + 
+                               child.getName() + 
+                               "\u001B[0m" + 
+                               "\n");
                 } else {
-                    aux.append(child.getPath() + "\n");
+                    aux.append(" " + 
+                               child.getName() + 
+                               "\n");
                 } 
             }
         }
         return aux.toString();
     }
+
     /**
-     * Elimina un archivo or directorio.
+     * Elimina un archivo o directorio.
      * <p>
      * Toma el nombre del archivo o directorio del parametro
      * lo elimina.
@@ -73,6 +89,7 @@ public class RmiServerImpl
         File aux = new File(name);
         return aux.delete();
     }
+
     /**
      * Descarga un archivo o directorio.
      * <p>
@@ -96,6 +113,7 @@ public class RmiServerImpl
             return(null);
         }
     }
+
     /**
      * Sube un archivo o directorio.
      * <p>
@@ -114,6 +132,7 @@ public class RmiServerImpl
             System.out.println("Fallo al intentar crear un archivo: " + e);
         }
     }
+
     /**     
      * Verifica si la combinacion de nombre y clave es parte de los usuarios.
      * <p>
@@ -134,12 +153,25 @@ public class RmiServerImpl
         }
         return false;
     }
-
-    public void log() {
-        this.cmds.to_s(20);
-    }
     
+    /**     
+     * Agrega un elemento a la cola de comandos.
+     * <p>
+     * Metodo ejecutado por el cliente cada vez que introduce un comando
+     * se pasa a la cola de comando, agregando el elemento al principio.
+     * <p>
+     * @param cmd comando que escribio el cliente
+     * @param name nombre del usuario que realizo el comando
+     *
+     */
     public void new_cmd(String cmd, String name) {
         this.cmds.add_ini(cmd, name);
+    }
+
+    /**     
+     * Imprime el contenido de la cola hasta 20 maximo.
+     */
+    public void log() {
+        this.cmds.to_s(20);
     }
 }

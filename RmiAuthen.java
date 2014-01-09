@@ -7,15 +7,6 @@ import java.rmi.RemoteException;
  */
 public interface RmiAuthen extends Remote {
 
-    /**
-     * Obtiene un mensaje.
-     * <p>
-     * Devuelve um mensaje definido.
-     * <p>
-     *
-     * @return sting del mensaje
-     */
-    public String getMessage() throws RemoteException;
     /**     
      * Verifica si la combinacion de nombre y clave es parte de los usuarios.
      * <p>

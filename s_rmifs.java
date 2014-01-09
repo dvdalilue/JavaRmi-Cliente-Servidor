@@ -9,7 +9,10 @@ import java.io.*;
  */
 public class s_rmifs {
     /**
-     * Metodo main de la clase que efectua la acciones del cliente.
+     * Metodo main de la clase que efectua la acciones del servidor
+     * de archivos asi como enlazar con el servidor de autenticacion
+     * al construir el objeto RmiServerImpl. Para luego recibir
+     * comandos por pantalla.
      * <p>
      * ********\\\\Sujeto a cambios!!!!
      * <p>
@@ -19,32 +22,23 @@ public class s_rmifs {
      */
     public static void main(String args[]) throws Exception {
         try {
-            System.out.println("RMI server started");
- 
-            try { //special exception handler for registry creation
+            System.out.println("RMI server iniciando"); 
+            try {
                 LocateRegistry.createRegistry(1099); 
-                System.out.println("java RMI registry created.");
+                System.out.println("java RMI registry creado.");
             } catch (RemoteException e) {
-                //do nothing, error means registry already exists
-                System.out.println("java registry already exists.");
+                System.out.println("java RMI registry ya existe.");
             }
+             //Instancia RmiServerImpl
+            RmiServerImpl obj = new RmiServerImpl("localhost",1100);
  
-            //Instantiate RmiServer
-            RmiServerImpl obj = new RmiServerImpl("localhost");
- 
-            // Bind this object instance to the name "RmiServer"
+            // Bind este objeto a la instancia "RmiServerImpl"
             Naming.rebind("rmi://localhost:1099/RmiService", obj);
-            System.out.println("PeerServer bound in registry");
             while (true) {
-                System.out.print("Servidor Rmi~$ ");
+                System.out.print("[Servidor_Archivos Rmi:~]$ ");
                 
-                //  open up standard input
                 BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-                
                 String cmd = null;
-                
-                //  read the username from the command-line; need to use try/catch with the
-                //  readLine() method
                 try {
                     cmd = br.readLine();
                     if (cmd.equals("sal")) {
@@ -53,7 +47,7 @@ public class s_rmifs {
                         obj.log();
                     }
                 } catch (IOException ioe) {
-                    System.out.println("IO error trying to read your name!");
+                    System.out.println("IO error leyendo el comando!");
                     System.exit(1);
                 }
             }

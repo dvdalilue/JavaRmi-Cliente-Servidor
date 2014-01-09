@@ -1,7 +1,7 @@
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.io.*;
 import java.lang.StringBuilder;
+import java.io.*;
 /**
  * @author      David Lilue <dvdalilue@gmail.com>
  * @version     1.0          
@@ -17,18 +17,22 @@ public class RmiAuthenImpl
      * 
      */
     private String usr;
+    private static final long serialVersionUID = 7526472295622776147L;
 
     /**
      * <p>
      * Contruye la clase a partir del constructor de la clase
-     * extendida UnicastRemoteObject
+     * extendida UnicastRemoteObject, ademas inicializa su string
+     * con toda la informacion del archivo que se busca por el
+     * parametro pasado al constructor.
      * <p>
+     *
+     * @param arch archivo con los usuarios y claves permitidos
      */
     public RmiAuthenImpl(String arch) throws RemoteException {
         super(0);
         String aux = "";
         StringBuilder temp = new StringBuilder("");
-        
         try {
             BufferedReader in = new BufferedReader(new FileReader(new File(arch)));;
             while ((aux = in.readLine()) != null) {
@@ -40,14 +44,7 @@ public class RmiAuthenImpl
             System.exit(1);
         }
     }
-    /**
-     * Devuelve un mensaje.
-     *
-     * @return el string de un mensaje
-     */
-    public String getMessage() {
-        return "Hello!!";
-    }
+
     /**     
      * Verifica si la combinacion de nombre y clave es parte de los usuarios.
      * <p>

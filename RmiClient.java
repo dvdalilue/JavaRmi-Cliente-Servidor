@@ -1,5 +1,5 @@
-import java.io.*;
 import java.util.*;
+import java.io.*;
 /**
  * @author      David Lilue <dvdalilue@gmail.com>
  * @version     1.0          
@@ -7,40 +7,52 @@ import java.util.*;
  */
 public class RmiClient { 
 
+    /**
+     * File del directorio local.
+     */
     private File local;
+
+    /**
+     * Coleccion de comandos de los clientes.
+     */
     private Collection<File> stream;
+
     /**
      * <p>
-     * Se crea una estructura con un path unico y un
-     * DirectoryStream que se iniciliza en null.
+     * Se crea una estructura con un path local y una
+     * lista de Files que se usara para el ls local.
      * <p>
      */
     public RmiClient() {
         this.local = new File(".");
         this.stream = new ArrayList<File>();
     }
+
     /**
-     * Crea un DirectoryStream del path actual de la aplicacion.
+     * Recorre el directorio local y va listando en el stream.
      *
      */
     public void scan_directory() {
         this.stream = new ArrayList<File>();
         addTree(this.local, this.stream);
     }
+
     /**
-     * Crea un DirectoryStream a partir del path pasado como
-     * parametro.
+     * Recorre el directorio a partir del path pasado como
+     * parametro y va listando en el stream.
      *
-     * @param path en el cual se desea el directory stream
+     * @param path en el cual se desea el el analisis
      */
-    public void scan_this_directory(String path) {
+    public void scan_directory(String path) {
         this.stream = new ArrayList<File>();
         addTree(new File(path), this.stream);
     }
+
     /**
      * Crea un archivo a partir de un buffer de bytes con la informacion.
      *
      * @param buffer arreglo de bytes con la informacion del archivo
+     * @param name nombre del archivo nuevo
      */
     public void create_file(byte[] buffer, String name) {
         try {
@@ -54,6 +66,7 @@ public class RmiClient {
             System.err.println("El archivo no existe, por lo que no se puede bajar");
         }
     }
+
     /**
      * Obtiene el arreglo de bytes con la informacion del archivo
      * especificado en el nombre.
@@ -69,23 +82,11 @@ public class RmiClient {
             input.read(buffer,0,buffer.length);
             input.close();
             return(buffer);
-        } catch(Exception e){
+        } catch (Exception e){
             return(null);
         }
     }
-    /**
-     * Imprime los archivos en el directorio
-     *
-     */
-    public void to_s() {
-        for (File aux : this.stream) {
-            if (aux.isDirectory()) {
-                System.out.println("\u001B[32m" + aux.getPath() + "\u001B[0m");
-            } else {
-                System.out.println(aux.getPath());
-            }           
-        }
-    }
+
     /**
      * Recorre el directorio recursivamente
      *
@@ -97,10 +98,29 @@ public class RmiClient {
         if (children != null) {
             for (File child : children) {
                 all.add(child);
-                //addTree(child, all);
+                //addTree(child, all); //Si se desee profundidad de directorios, descomentar
             }
         }
     }
+
+    /**
+     * Imprime los archivos en el directorio, los
+     * directorios de color verde. Si lo permite el shell.
+     *
+     */
+    public void to_s() {
+        for (File aux : this.stream) {
+            if (aux.isDirectory()) {
+                System.out.println("\u001B[32m " + 
+                                   aux.getName() + 
+                                   "\u001B[0m");
+            } else {
+                System.out.println(" " + 
+                                   aux.getName());
+            }           
+        }
+    }
+
     /**
      * Muestra las opciones de comandos
      *

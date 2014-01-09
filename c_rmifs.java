@@ -1,6 +1,4 @@
 import java.rmi.Naming;
-import java.io.File;
-import java.util.*;
 import java.io.*;
 /**
  * @author      David Lilue <dvdalilue@gmail.com>
@@ -19,7 +17,6 @@ public class c_rmifs {
      */
     public static void main(String args[]) throws Exception {
         try {
-            //  open up standard input
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             String atr[], name, key, cmd = null;
             byte[] buffer;
@@ -28,19 +25,16 @@ public class c_rmifs {
             System.out.print("Clave: ");
             key = br.readLine();
 
-            RmiServer obj = (RmiServer)Naming.lookup("rmi://localhost:1099/RmiService"); 
-            //RmiServer obj = (RmiServer)Naming.lookup("rmi://serena.ldc.usb.ve:1099/RmiService");
-            
-            if (!(obj.authentic(name+":"+key))) {
+            RmiServer obj = (RmiServer)Naming.lookup("rmi://localhost:1099/RmiService");
+            if (!(obj.authentic(name+":"+key)) && name!="") {
                 System.out.println("***Usuario o clave invalido!!!");
                 System.exit(0);
             }
             RmiClient cli = new RmiClient();
+            
             while (true) {
                 System.out.print("\u001B[37m["+name+"@"+"Cliente Rmi:~]$ \u001B[0m");
-                
-                //  read the username from the command-line; need to use try/catch with the
-                //  readLine() method
+
                 try {
                     cmd = br.readLine();
                     if (!cmd.isEmpty()) {
@@ -50,7 +44,7 @@ public class c_rmifs {
                             System.exit(0);
                         }
                         else if (cmd.equals("info")) {
-                            cli.info();
+                            RmiClient.info();
                         }
                         else if (cmd.equals("lls")) {
                             cli.scan_directory();

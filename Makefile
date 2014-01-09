@@ -3,20 +3,20 @@ JAVAC = javac
 RMIC = rmic
 
 # Sources
+AUTHEN = a_rmifs.java
 SERVER = s_rmifs.java
 CLIENT = c_rmifs.java
-AUTHEN = a_rmifs.java
 
-all: s_rmifs c_rmifs a_rmifs
-	$(RMIC) RmiServerImpl RmiAuthenImpl
+all: a_rmifs s_rmifs c_rmifs
+	$(RMIC) RmiAuthenImpl RmiServerImpl
 
-s_rmifs: $(SERVER)
+a_rmifs: $(SERVER)
 	$(JAVAC) $<
 
-c_rmifs: $(CLIENT)
+s_rmifs: $(CLIENT)
 	$(JAVAC) $<
 
-a_rmifs: $(AUTHEN)
+c_rmifs: $(AUTHEN)
 	$(JAVAC) $<
 
 clean:

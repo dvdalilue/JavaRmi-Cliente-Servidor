@@ -1,6 +1,7 @@
 import java.rmi.RemoteException;
+import java.rmi.registry.*;
 import java.rmi.Naming;
-import java.rmi.registry.*; 
+import java.io.*;
 /**
  * @author      David Lilue <dvdalilue@gmail.com>
  * @version     1.0          
@@ -8,7 +9,8 @@ import java.rmi.registry.*;
  */
 public class a_rmifs {
     /**
-     * Metodo main de la clase que efectua la acciones del cliente.
+     * Metodo main de la clase que efectua la acciones del servidor
+     * de autenticacion.
      * <p>
      * ********\\\\Sujeto a cambios!!!!
      * <p>
@@ -17,21 +19,32 @@ public class a_rmifs {
      * cuando se ejecuta el main
      */
     public static void main(String args[]) throws Exception {
-        System.out.println("RMI server started");
- 
-        try { //special exception handler for registry creation
+        System.out.println("RMI server iniciando"); 
+        try {
             LocateRegistry.createRegistry(1100); 
-            System.out.println("java RMI registry created.");
+            System.out.println("java RMI registry creado.");
         } catch (RemoteException e) {
-            //do nothing, error means registry already exists
-            System.out.println("java registry already exists.");
+            System.out.println("java RMI registry ya existe.");
         }
- 
-        //Instantiate RmiServer
+         //Instancia RmiAuthenImpl
         RmiAuthenImpl obj = new RmiAuthenImpl("user");
  
-        // Bind this object instance to the name "RmiServer"
+        // Bind este objeto a la instancia "RmiAuthenImpl"
         Naming.rebind("rmi://localhost:1100/RmiAuthentication", obj);
-        System.out.println("PeerServer bound in registry");
+        while (true) {
+            System.out.print("[Servidor_Authen Rmi:~]$ ");
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            String cmd = null;
+            try {
+                cmd = br.readLine();
+                if (cmd.equals("sal")) {
+                    System.exit(0);
+                }
+            } catch (IOException ioe) {
+                System.out.println("IO error leyendo el comando!");
+                System.exit(1);
+            }
+        }
     }
 }
