@@ -41,8 +41,8 @@ public class RmiServerImpl
         super(0);
         this.cmds = new Queue<String>();
         try {
-            this.aut = (RmiAuthen)Naming.lookup("rmi://" + host + ":" + 
-                                                port + "/RmiAuthentication");
+            this.aut = (RmiAuthen) Naming.lookup("rmi://" + host + ":" + 
+                                                 port + "/RmiAuthentication");
         } catch (Exception e) {
             System.out.println("Constructor RmiServerImpl: " + e);
             System.exit(1);

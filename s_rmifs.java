@@ -1,6 +1,7 @@
 import java.rmi.RemoteException;
 import java.rmi.registry.*;
 import java.rmi.Naming;
+import gnu.getopt.Getopt;
 import java.io.*;
 /**
  * @author      David Lilue <dvdalilue@gmail.com>
@@ -21,19 +22,68 @@ public class s_rmifs {
      * cuando se ejecuta el main
      */
     public static void main(String args[]) throws Exception {
+
+        int c;   
+        Getopt g = new Getopt("s_rmifs", args, "l:h:r:a?");
+        g.setOpterr(true);
+
+        String host = null;
+        int plocal = 0;
+        int puerto = 0;
+ 
+        while ((c = g.getopt()) != -1)
+            {
+                switch(c)
+                    {
+                    case 'l':
+                        try {
+                            plocal = Integer.parseInt(g.getOptarg());
+                        } catch (Exception e) {
+                            System.out.println("Error Puerto Local: Debe espicificar un entero");
+                            System.exit(1);
+                        }
+                    case 'h':
+                        host = g.getOptarg();
+                        break;
+                    case 'r':
+                        try {
+                            puerto = Integer.parseInt(g.getOptarg());
+                        } catch (Exception e) {
+                            System.out.println("Error Puerto: Debe espicificar un entero");
+                            System.exit(1);
+                        }
+                        break;
+                    case 'a':
+                        System.out.print("\nSintaxis correcta para s_rmifs.java -- ./java s_rmifs -l <puertolocal> -h <host> -r <puerto> \n \n Detalles de las opciones:\n -a <ayuda>        : Solicita ayuda.\n -l <puertolocal>  : El puerto que usará el rmiregistry que tendrá información de los objetos remotos publicados por el servidor de archivos.\n -h <host>         : Es el nombre DNS o dirección IP del computador donde corre el servidor de autenticación.\n -r <puerto>       : Este será el puerto que usará el rmiregistry que tendrá información de los objetos remotos publicados por el servidor de autenticación.\n");
+                        System.exit(0);
+                        break;
+                    case '?':
+                        break; // getopt() already printed an error
+                    default:
+                        System.out.print("getopt() returned " + c + "\n");
+                    }
+            }
+
+        // ------------------------------ CONDICIONES DE ENTRADA -------------------------------------------------------------------------------//
+     
+        if(host==null || puerto==0 || plocal==0){
+            System.out.println("Es obligatorio especificar todos los argumentos, para mayor información solicite ayuda con la opción -a.\n");
+            System.exit(0);
+        }
+
         try {
             System.out.println("RMI server iniciando"); 
             try {
-                LocateRegistry.createRegistry(1099); 
+                LocateRegistry.createRegistry(plocal); 
                 System.out.println("java RMI registry creado.");
             } catch (RemoteException e) {
                 System.out.println("java RMI registry ya existe.");
             }
              //Instancia RmiServerImpl
-            RmiServerImpl obj = new RmiServerImpl("localhost",1100);
+            RmiServerImpl obj = new RmiServerImpl(host,puerto);
  
             // Bind este objeto a la instancia "RmiServerImpl"
-            Naming.rebind("rmi://localhost:1099/RmiService", obj);
+            Naming.rebind("rmi://localhost:"+plocal+"/RmiService", obj);
             while (true) {
                 System.out.print("[Servidor_Archivos Rmi:~]$ ");
                 

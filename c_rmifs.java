@@ -1,3 +1,5 @@
+import gnu.getopt.Getopt;
+import gnu.getopt.LongOpt;
 import java.rmi.Naming;
 import java.io.*;
 /**
@@ -16,16 +18,68 @@ public class c_rmifs {
      * cuando se ejecuta el main
      */
     public static void main(String args[]) throws Exception {
+
+        int c;
+
+        Getopt g = new Getopt("c_rmifs", args, "f?m:p:c?h?");
+        g.setOpterr(true);
+
+        String usuarios=null;
+        int puerto = 0;
+        String servidor=null;
+        String comandos=null;
+
+        while ((c = g.getopt()) != -1)
+            {
+                switch(c)
+                    {
+                    case 'f':
+                        usuarios = g.getOptarg();
+                        break;
+                    case 'm':
+                        servidor = g.getOptarg();
+                        break;
+                    case 'p':
+                        try {
+                            puerto = Integer.parseInt(g.getOptarg());
+                        } catch (Exception e) {
+                            System.out.println("Error Puerto: Debe espicificar un entero");
+                            System.exit(1);
+                        }
+                        break;
+                    case 'c':
+                        comandos = g.getOptarg();
+                        break;
+                    case 'h':
+                        System.out.print("\n\nSintaxis correcta para c_rmifs.java -- ./java c_rmifs [-f usuarios] -m servidor -p puerto [-c comandos] \n \n Detalles de las opciones:\n -h <ayuda>     : Solicita ayuda.\n [-f usuarios]  : Nombre del archivo de los usuarios y claves.\n -m <servidor>  : Es el nombre DNS o dirección IP del computador donde corre el servidor de archivos.\n -p <puerto>    : Puerto donde estará el rmiregistry del servidor.\n [-c comandos]  : Será el nombre y dirección relativa o absoluta de un archivo, que contendrá en cada línea, uno de los comandos que el cliente puede ejecutar por línea de comandos. El cliente debe ejecutar primero los comandos de este archivo y al terminar comenzar a aceptar comandos por teclado, a menos que uno de los comandos del archivo sea el comando sal. ");
+                        System.exit(0);
+                        break;
+                    case '?':
+                        break; // getopt() already printed an error
+                    default:
+                        System.out.print("getopt() returned " + c + "\n");
+                    }
+            }
+
+        // ------------------------------ CONDICIONES DE ENTRADA -------------------------------------------------------------------------------//
+     
+        if(puerto==0 || servidor==null){
+            System.out.println("Es obligatorio especificar un puerto y un servidor, para mayor información solicite ayuda con la opción -h.\n");
+            System.exit(0);
+        }
+ 
+        // -------------------------------------- FIN CONDICIONES -------------------------------------------------------------------------------//
+
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             String atr[], name, key, cmd = null;
             byte[] buffer;
             System.out.print("Nombre: ");
-            name = br.readLine();
+            name = br.readLine().trim();
             System.out.print("Clave: ");
-            key = br.readLine();
+            key = br.readLine().trim();
 
-            RmiServer obj = (RmiServer)Naming.lookup("rmi://localhost:1099/RmiService");
+            RmiServer obj = (RmiServer)Naming.lookup("rmi://"+servidor+":"+puerto+"/RmiService");
             if (!(obj.authentic(name+":"+key))) {
                 System.out.println("***Usuario o clave invalido!!!");
                 System.exit(0);
