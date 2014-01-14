@@ -1,5 +1,4 @@
 import gnu.getopt.Getopt;
-import gnu.getopt.LongOpt;
 import java.rmi.Naming;
 import java.io.*;
 /**
@@ -18,16 +17,14 @@ public class c_rmifs {
      * cuando se ejecuta el main
      */
     public static void main(String args[]) throws Exception {
-
         int c;
-
-        Getopt g = new Getopt("c_rmifs", args, "f?m:p:c?h?");
+        Getopt g = new Getopt("c_rmifs", args, "f:m:p:c:h?");
         g.setOpterr(true);
 
-        String usuarios=null;
+        String usuarios = null;
         int puerto = 0;
-        String servidor=null;
-        String comandos=null;
+        String servidor = null;
+        String comandos = null;
 
         while ((c = g.getopt()) != -1)
             {
@@ -62,7 +59,7 @@ public class c_rmifs {
             }
 
         // ------------------------------ CONDICIONES DE ENTRADA -------------------------------------------------------------------------------//
-     
+
         if(puerto==0 || servidor==null){
             System.out.println("Es obligatorio especificar un puerto y un servidor, para mayor información solicite ayuda con la opción -h.\n");
             System.exit(0);
@@ -73,79 +70,102 @@ public class c_rmifs {
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             String atr[], name, key, cmd = null;
-            byte[] buffer;
-            System.out.print("Nombre: ");
-            name = br.readLine().trim();
-            System.out.print("Clave: ");
-            key = br.readLine().trim();
+            
+            if (usuarios == null) {
+                System.out.print("Nombre: ");
+                name = br.readLine().trim();
+                System.out.print("Clave: ");
+                key = name + ":" + br.readLine().trim();;
+            } else {
+                key = FileManager.get_first_line(usuarios);
+                atr = key.split(":");
+                name = atr[0];
+            }
 
             RmiServer obj = (RmiServer)Naming.lookup("rmi://"+servidor+":"+puerto+"/RmiService");
-            if (!(obj.authentic(name+":"+key))) {
+            if (!(obj.authentic(key))) {
                 System.out.println("***Usuario o clave invalido!!!");
                 System.exit(0);
             }
             RmiClient cli = new RmiClient();
+
+            if (comandos != null) {
+                FileManager stream;
+                stream = new FileManager(comandos);
+                while ((cmd = stream.get_line()) != null) {
+                    obj.new_cmd(cmd,name);
+                    atr = cmd.split(" ");
+                    System.out.print("\u001B[37m"+"Comando desde archivo:\u001B[31m "+atr[0]+"\u001B[0m \n");
+                    cmd_manager(cmd, atr, cli, obj);
+                }
+            }
             
             while (true) {
                 System.out.print("\u001B[37m["+name+"@"+"Cliente Rmi:~]$ \u001B[0m");
-
-                try {
-                    cmd = br.readLine();
-                    if (!cmd.isEmpty()) {
-                        obj.new_cmd(cmd,name);
-                        atr = cmd.split(" ");
-                        if (cmd.equals("sal")) {
-                            System.exit(0);
-                        }
-                        else if (cmd.equals("info")) {
-                            RmiClient.info();
-                        }
-                        else if (cmd.equals("lls")) {
-                            cli.scan_directory();
-                            cli.to_s();
-                        }
-                        else if (cmd.equals("rls")) {
-                            System.out.println(obj.directory());                        
-                        }
-                        else if (atr[0].equals("sub")) {
-                            try {
-                                if ((buffer = cli.get_byte_b(atr[1])) != null) {
-                                    obj.up(buffer, atr[1]+"2");
-                                } else {
-                                    System.out.println("El archivo que desea subir no existe en su directorio local.");
-                                }
-                            } catch (Exception e) {
-                                System.out.println("Falto identificar el archivo. Ej. sub test.txt");
-                            }
-                        }
-                        else if (atr[0].equals("baj")) {
-                            try {
-                                buffer = obj.down(atr[1]);
-                                cli.create_file(buffer,atr[1]);
-                            } catch (Exception e) {
-                                System.out.println("Falto identificar el archivo. Ej. baj test.txt");
-                            }
-                        }
-                        else if (atr[0].equals("bor")) {
-                            try {
-                                if (obj.del(atr[1])) {
-                                    System.out.println("Se elimino el archivo");
-                                } else {
-                                    System.out.println("No se elimino el archivo");
-                                }
-                            } catch (Exception e) {
-                                System.out.println("Falto identificar el archivo. Ej. bor test.txt");
-                            }
-                        }
-                    }
-                } catch (Exception e) {
-                    System.out.println("Command exception: " + e);
-                    System.exit(1);
+                cmd = br.readLine();
+                if (!cmd.isEmpty()) {
+                    obj.new_cmd(cmd,name);
+                    atr = cmd.split(" ");
+                    cmd_manager(cmd, atr, cli, obj);
                 }
             }
         } catch (Exception e) {
-            System.out.println("RmiClient exception: " + e);
+            System.out.println("Error RmiClient");
             System.exit(1);
+        }
+    }
+
+    public static void cmd_manager(String cmd, String[] atr, RmiClient cli, RmiServer obj) {
+        byte[] buffer;
+
+        if (cmd.equals("sal")) {
+            System.exit(0);
+        }
+        else if (cmd.equals("info")) {
+            RmiClient.info();
+        }
+        else if (cmd.equals("lls")) {
+            cli.scan_directory();
+            cli.to_s();
+        }
+        else if (cmd.equals("rls")) {
+            try {
+                System.out.println(obj.directory());                        
+            } catch (Exception e) {
+                System.out.println("Error rls:" + e);
+            }
+        }
+        else if (atr[0].equals("sub")) {
+            try {
+                if ((buffer = cli.get_byte_b(atr[1])) != null) {
+                    obj.up(buffer, atr[1]);
+                } else {
+                    System.out.println("El archivo que desea subir no existe en su directorio local.");
+                }
+            } catch (Exception e) {
+                System.out.println("Falto identificar el archivo. Ej. sub test.txt");
+            }
+        }
+        else if (atr[0].equals("baj")) {
+            try {
+                buffer = obj.down(atr[1]);
+                cli.create_file(buffer,atr[1]);
+            } catch (Exception e) {
+                System.out.println("Falto identificar el archivo. Ej. baj test.txt");
+            }
+        }
+        else if (atr[0].equals("bor")) {
+            try {
+                if (obj.del(atr[1])) {
+                    System.out.println("Se elimino el archivo");
+                } else {
+                    System.out.println("No se elimino el archivo");
+                }
+            } catch (Exception e) {
+                System.out.println("Falto identificar el archivo. Ej. bor test.txt");
+            }
+        } else {
+            System.out.println("-- Rmi Client: " +atr[0]+ ": comando invalido");
         }
     }
 }
