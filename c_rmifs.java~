@@ -123,14 +123,6 @@ public class c_rmifs {
         }
     }
 
-    /**
-     * Metodo cmd_manager que maneja los comandos ejecutados por el cliente.
-     *
-     *@param cmd -- comando a realizar, atr -- arreglo de strings que permite manejar los comandos ingresados, RmiClient y RmiServer-- RMI del
-     * cliente y del servidor en los que se establece la conexión.
-     * 
-     */
-
     public static void cmd_manager(String cmd, String[] atr, RmiClient cli, RmiServer obj) {
         byte[] buffer;
 

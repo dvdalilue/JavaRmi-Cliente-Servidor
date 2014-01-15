@@ -4,10 +4,9 @@ import java.rmi.server.UnicastRemoteObject;
 import java.lang.StringBuilder;
 import java.io.*;
 /**
- * @author      David Lilue <dvdalilue@gmail.com> --- 09-10444
- *		Verónica Liñayo <vlinayo@gmail.com> --- 08-10615
- * @version     1.0          
- * @since       2014-01-07
+ * @author      David Lilue <dvdalilue@gmail.com>
+ * @version     1.1          
+ * @since       2013-12-23
  */
 public class RmiServerImpl
     extends UnicastRemoteObject 

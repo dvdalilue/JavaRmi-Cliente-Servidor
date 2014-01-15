@@ -72,14 +72,12 @@ public class s_rmifs {
                     }
             }
 
-  // -------------------------------------------------------CONDICIONES DE ENTRADA ----------------------------------------------------------//
+        // ------------------------------ CONDICIONES DE ENTRADA -------------------------------------------------------------------------------//
      
         if(host==null || puerto==0 || plocal==0){
             System.out.println("Es obligatorio especificar todos los argumentos, para mayor información solicite ayuda con la opción -a.\n");
             System.exit(0);
         }
-
-  // -------------------------------------------------------- FIN CONDICIONES ---------------------------------------------------------------//
 
         try {
             System.out.println("RMI server iniciando"); 

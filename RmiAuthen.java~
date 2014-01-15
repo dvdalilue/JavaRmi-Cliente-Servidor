@@ -1,8 +1,7 @@
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 /**
- * @author      David Lilue <dvdalilue@gmail.com> --- 09-10444
- *		Verónica Liñayo <vlinayo@gmail.com> --- 08-10615
+ * @author      David Lilue <dvdalilue@gmail.com>
  * @version     1.0          
  * @since       2014-01-07
  */
