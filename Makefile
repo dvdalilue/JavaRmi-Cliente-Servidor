@@ -1,8 +1,9 @@
-#
-# @author      David Lilue <dvdalilue@gmail.com> --- 09-10444
-#	       Verónica Liñayo <vlinayo@gmail.com> --- 08-10615
-# @version     1.0          
-# @since       2014-01-07
+# 
+#David Lilue	--- 09-10444
+#Veronica Liñayo --- 08-10615
+# 
+#Grupo 33
+
 
 # Compilers
 JAVAC = javac
@@ -12,21 +13,20 @@ RMIC = rmic
 AUTHEN = a_rmifs.java
 SERVER = s_rmifs.java
 CLIENT = c_rmifs.java
+GNU = gnu
+GETOPT = getopt
 
-all: todo #a_rmifs s_rmifs c_rmifs
+all: getopt todo
 	$(RMIC) RmiAuthenImpl RmiServerImpl
 
 todo: $(AUTHEN) $(SERVER) $(CLIENT)
 	$(JAVAC) $^
 
-# a_rmifs: $(AUTHEN)
-# 	$(JAVAC) $<
+getopt:
+	cd $(GNU); make -C $(GETOPT)
 
-# s_rmifs: $(SERVER)
-# 	$(JAVAC) $<
-
-# c_rmifs: $(CLIENT)
-# 	$(JAVAC) $<
-
-clean:
+clean: cleangnu
 	\rm -f *.class *.*~
+
+cleangnu:
+	cd $(GNU); make -C $(GETOPT) clean

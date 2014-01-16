@@ -1,3 +1,10 @@
+/*
+ * David Lilue     --- 09-10444
+ * Veronica Liñayo --- 08-10615
+ * 
+ * Grupo 33
+ */
+
 import java.rmi.RemoteException;
 import java.rmi.registry.*;
 import java.rmi.Naming;
@@ -16,7 +23,14 @@ public class s_rmifs {
      * al construir el objeto RmiServerImpl. Para luego recibir
      * comandos por pantalla.
      * <p>
-     * ********\\\\Sujeto a cambios!!!!
+     * Funcion que se ejecuta con java s_rmifs [Opciones], las analisa 
+     * y dependiendo dara un mensaje de error o montara el servidor.
+     * Construye un objeto que implemento una interfaz definida por
+     * el cliente. Para que otra aplicacion pueda acceder a los servicios
+     * se enlaza con el localhost y un puerto que se especifico en las
+     * opciones.
+     * Internamente el objeto RmiServerImpl, posee una referencia a otro
+     * servidor que en este caso es de autenticacion.
      * <p>
      *
      *@param args arreglo de strings, de los argumentos de entrada
@@ -26,12 +40,10 @@ public class s_rmifs {
 
         int c;  
 	/**
-         * Función Getopt de la librería gnu.getopt.Getopt, basada en la función Getopt de C
+         * Funcion Getopt de la libreria gnu.getopt.Getopt, basada en la funcion Getopt de C
 	 * la cual permite el procesamiento y manejo de los datos de entrada por consola.
 	 *
-	 *@param args arreglo de strings, de los argumentos de entrada
-	 * cuando se ejecuta el main.
-	 */ 
+         */
         Getopt g = new Getopt("s_rmifs", args, "l:h:r:a?");
         g.setOpterr(true); //Activa el manejador de errores de la función Getopt.
 
@@ -62,7 +74,15 @@ public class s_rmifs {
                         }
                         break;
                     case 'a':
-                        System.out.print("\nSintaxis correcta para s_rmifs.java -- ./java s_rmifs -l <puertolocal> -h <host> -r <puerto> \n \n Detalles de las opciones:\n -a <ayuda>        : Solicita ayuda.\n -l <puertolocal>  : El puerto que usará el rmiregistry que tendrá información de los objetos remotos publicados por el servidor de archivos.\n -h <host>         : Es el nombre DNS o dirección IP del computador donde corre el servidor de autenticación.\n -r <puerto>       : Este será el puerto que usará el rmiregistry que tendrá información de los objetos remotos publicados por el servidor de autenticación.\n");
+                        System.out.print("Sintaxis correcta: " +
+                                         "./java s_rmifs -l <puertolocal> -h <host> -r <puerto> \n\n" + 
+                                         "Detalles de las opciones:\n" +
+                                         "-a           : Solicita ayuda.\n" +
+                                         "-l <puerto>  : El puerto local que usara el rmiregistry que tendra informacion de\n" +
+                                         "               los objetos remotos publicados por el servidor de archivos.\n" +
+                                         "-h <host>    : Es el nombre DNS o direccion IP del computador donde corre el servidor de autenticacion.\n" +
+                                         "-r <puerto>  : Este sera el puerto que usará el rmiregistry que tendra informacion\n" +
+                                         "               de los objetos remotos publicados por el servidor de autenticacion.\n");
                         System.exit(0);
                         break;
                     case '?': //El manejador se encarga de este caso(Insertar un valor inválido).
@@ -75,7 +95,7 @@ public class s_rmifs {
   // -------------------------------------------------------CONDICIONES DE ENTRADA ----------------------------------------------------------//
      
         if(host==null || puerto==0 || plocal==0){
-            System.out.println("Es obligatorio especificar todos los argumentos, para mayor información solicite ayuda con la opción -a.\n");
+            System.out.println("Es obligatorio especificar todos los argumentos, para mayor informacion solicite ayuda con la opcion -a.\n");
             System.exit(0);
         }
 
@@ -100,11 +120,16 @@ public class s_rmifs {
                 BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
                 String cmd = null;
                 try {
+                    /*
+                     * Reconocimiento de comandos
+                    */
                     cmd = br.readLine();
                     if (cmd.equals("sal")) {
                         System.exit(0);
                     } else if (cmd.equals("log")) {
                         obj.log();
+                    }  else {
+                        System.out.println("-- Rmi Server: " +cmd+ ": comando invalido");
                     }
                 } catch (IOException ioe) {
                     System.out.println("IO error leyendo el comando!");

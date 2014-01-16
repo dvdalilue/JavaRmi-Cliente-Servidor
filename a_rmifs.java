@@ -1,3 +1,9 @@
+/*
+ * David Lilue     --- 09-10444
+ * Veronica Liñayo --- 08-10615
+ * 
+ * Grupo 33
+ */
 import java.rmi.RemoteException;
 import java.rmi.registry.*;
 import java.rmi.Naming;
@@ -22,7 +28,7 @@ public class a_rmifs {
         int c;
 
 	/**
-         * Función Getopt de la librería gnu.getopt.Getopt, basada en la función Getopt de C
+         * Función Getopt de la libreria gnu.getopt.Getopt, basada en la función Getopt de C
 	 * la cual permite el procesamiento y manejo de los datos de entrada por consola.
 	 *
 	 *@param args arreglo de strings, de los argumentos de entrada
@@ -49,7 +55,12 @@ public class a_rmifs {
                         usuarios = g.getOptarg();
                         break;
                     case 'h':
-                        System.out.print("\n\nSintaxis correcta: rmifs.java -- ./java rmifs -f <usuario> -p <puerto> [-h <ayuda>] \n \n Detalles de las opciones:\n [-h <ayuda>]   : Solicita ayuda.\n -f <usuarios>  : Nombre del archivo de los usuarios y claves.\n -p <puerto>    : Aunque normalmente en los procesos de invocación remota de métodos se pudiera usar un puerto por defecto, y no colocarlo aquí, por el hecho de tener varios proyectos de características similares en la misma instalación, solicitamos que los programas rmiregistry corran en un puerto que comience con el número 2 y que las siguientes 5 cifras correspondan a las últimas 5 cifras del carnet de alguno de los integrantes del grupo. Esta norma busca evitar que interactúen programas de proyectos diferentes.  -- Puertos probados: 210615 210444.\n ");
+                        System.out.print("Sintaxis correcta: " +
+                                         "./java a_rmifs -f <usuario> -p <puerto> [-h <ayuda>] \n \n " +
+                                         "Detalles de las opciones:\n " +
+                                         "-h             : Solicita ayuda.\n " +
+                                         "-f <usuarios>  : Nombre del archivo de los usuarios y claves.\n " +
+                                         "-p <puerto>    : puerto local de la aplicacion.\n ");
                         System.exit(0);
                         break;
                     case '?': //El manejador se encarga de este caso(Insertar un valor inválido).
@@ -63,7 +74,7 @@ public class a_rmifs {
     
      
         if(puerto==0 || usuarios==null){
-            System.out.println("Es obligatorio especificar todos los argumentos, para mayor información solicite ayuda con la opción -h.\n");
+            System.out.println("Es obligatorio especificar todos los argumentos, para mayor informacion solicite ayuda con la opcion -h.\n");
             System.exit(1);
         }
  
@@ -87,7 +98,7 @@ public class a_rmifs {
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             String cmd = null;
             try {
-                cmd = br.readLine();
+                cmd = br.readLine(); //Recepcion de comandos
                 if (cmd.equals("sal")) {
                     System.exit(0);
                 }

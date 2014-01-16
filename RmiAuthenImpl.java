@@ -1,3 +1,10 @@
+/*
+ * David Lilue     --- 09-10444
+ * Veronica Liñayo --- 08-10615
+ * 
+ * Grupo 33
+ */
+
 import java.rmi.server.UnicastRemoteObject;
 import java.rmi.RemoteException;
 import java.util.*;
@@ -21,9 +28,9 @@ public class RmiAuthenImpl
     /**
      * <p>
      * Contruye la clase a partir del constructor de la clase
-     * extendida UnicastRemoteObject, ademas inicializa su string
+     * extendida UnicastRemoteObject, ademas inicializa la coleccion
      * con toda la informacion del archivo que se busca por el
-     * parametro pasado al constructor.
+     * parametro pasado al constructor. En una lista de Strings
      * <p>
      *
      * @param arch archivo con los usuarios y claves permitidos
