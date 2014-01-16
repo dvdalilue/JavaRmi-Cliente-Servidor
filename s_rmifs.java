@@ -107,7 +107,8 @@ public class s_rmifs {
                 LocateRegistry.createRegistry(plocal); 
                 System.out.println("java RMI registry creado.");
             } catch (RemoteException e) {
-                System.out.println("java RMI registry ya existe.");
+                System.out.println("java RMI registry ya existe: Especifique otro puerto");
+                System.exit(1);
             }
              //Instancia RmiServerImpl
             RmiServerImpl obj = new RmiServerImpl(host,puerto);

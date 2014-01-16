@@ -85,7 +85,8 @@ public class a_rmifs {
             LocateRegistry.createRegistry(puerto); 
             System.out.println("java RMI registry creado.");
         } catch (RemoteException e) {
-            System.out.println("java RMI registry ya existe.");
+            System.out.println("java RMI registry ya existe: Especifique otro puerto");
+            System.exit(1);
         }
         //Instancia RmiAuthenImpl
         RmiAuthenImpl obj = new RmiAuthenImpl(usuarios);
